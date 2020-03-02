@@ -1,28 +1,24 @@
 #include<iostream>
-#include<vector>
+#include<string.h>
+#include<algorithm>
 using namespace std;
 int main(){
-    int n,i,num,sum,result=-2000;
+    int n;
     cin>>n;
-    vector<int> vec;
+    int arr[n],i;
     for(i=0;i<n;i++){
-        scanf("%d",&num);
-        vec.push_back(num);
+        cin>>arr[i];
     }
-    sum=0;
-    for(vector<int>::size_type i = 0;i<vec.size();i++){
-        if(sum+vec[i]>=0){
-            if(result<sum+vec[i]){
-                result=sum+vec[i];
-            }
-            sum+=vec[i];
-        }
-        else {
-            if(result<sum+vec[i]){
-                result=sum+vec[i];
-            }
-            sum=vec[i];
-        }
+    int dp[i],large;
+    memset(dp,0,sizeof(dp));
+    dp[n-1]=arr[n-1];
+    large=dp[n-1];
+    for(i=n-2;i>=0;i--){
+        if(dp[i+1]>0)
+            dp[i]=arr[i]+dp[i+1];
+        else
+            dp[i]=arr[i];
+        large=max(large,dp[i]);
     }
-    cout<<result;
+    cout<<large<<endl;
 }

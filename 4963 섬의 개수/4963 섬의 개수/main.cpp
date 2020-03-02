@@ -1,60 +1,89 @@
 #include<iostream>
 #include<queue>
-#include<utility>
-#include<string.h>
 using namespace std;
-int island[50][50];
-void bfs(int w,int h){
-    int count=0;
-    pair<int,int> p;
-    queue<pair<int,int>> q;
-    int i,j,k,visit[50][50];
-    int dx[8]={1,1,1,0,0,-1,-1,-1};
-    int dy[8]={1,0,-1,1,-1,1,0,-1};
-    memset(visit,0,sizeof(visit));
-    for(i=0;i<h;i++){
-        for(j=0;j<w;j++){
-            if(island[i][j]==1&&visit[i][j]==0){
-                count++;
-                visit[i][j]=1;
-                p=make_pair(i,j);
-                q.push(p);
-                while(!q.empty()){
-                    for(k=0;k<8;k++){
-                        int x=q.front().first+dx[k];
-                        int y=q.front().second+dy[k];
-                        if(x<0||x>=h||y<0||y>=w)
-                            continue;
-                        if(island[x][y]==1&&visit[x][y]==0){
-                            p=make_pair(x,y);
-                            q.push(p);
-                            visit[x][y]=1;
-                        }
-                        q.pop();
-                    }
-                }
-            }
-        }
-    }
-    cout<<count<<endl;
-}
+typedef struct location{
+    int h;
+    int w;
+}Location;
 int main(){
     int w,h;
     while(1){
         cin>>w>>h;
         if(w==0&&h==0)
             break;
-        int i,j;
-        for(i=0;i<50;i++){
-            for(j=0;j<50;j++){
-                island[i][j]=0;
-            }
-        }
+        int island[h][w],i,j;
         for(i=0;i<h;i++){
             for(j=0;j<w;j++){
                 cin>>island[i][j];
+                
             }
         }
-        bfs(w,h);
+        Location l;
+        queue<Location> q;
+        int count = 0;
+        for(i=0;i<h;i++){
+            for(j=0;j<w;j++){
+                if(island[i][j]==1){
+                    l.h=i;
+                    l.w=j;
+                    q.push(l);
+                    island[i][j]=0;
+                    while(!q.empty()){
+                        if(island[q.front().h+1][q.front().w]==1&&q.front().h<h-1){
+                            island[q.front().h+1][q.front().w]=0;
+                            l.h=q.front().h+1;
+                            l.w=q.front().w;
+                            q.push(l);
+                        }
+                        if(island[q.front().h-1][q.front().w]==1&&q.front().h>0){
+                            island[q.front().h-1][q.front().w]=0;
+                            l.h=q.front().h-1;
+                            l.w=q.front().w;
+                            q.push(l);
+                        }
+                        if(island[q.front().h][q.front().w+1]==1&&q.front().w<w-1){
+                            
+                            island[q.front().h][q.front().w+1]=0;
+                            l.h=q.front().h;
+                            l.w=q.front().w+1;
+                            q.push(l);
+                        }
+                        if(island[q.front().h][q.front().w-1]==1&&q.front().w>0){
+                            island[q.front().h][q.front().w-1]=0;
+                            l.h=q.front().h;
+                            l.w=q.front().w-1;
+                            q.push(l);
+                        }
+                        if(island[q.front().h+1][q.front().w+1]==1&&q.front().h<h-1&&q.front().w<w-1){
+                            island[q.front().h+1][q.front().w+1]=0;
+                            l.h=q.front().h+1;
+                            l.w=q.front().w+1;
+                            q.push(l);
+                        }
+                        if(island[q.front().h-1][q.front().w-1]==1&&q.front().h>0&&q.front().w>0){
+                            island[q.front().h-1][q.front().w-1]=0;
+                            l.h=q.front().h-1;
+                            l.w=q.front().w-1;
+                            q.push(l);
+                        }
+                        if(island[q.front().h+1][q.front().w-1]==1&&q.front().h<h-1&&q.front().w>0){
+                            island[q.front().h+1][q.front().w-1]=0;
+                            l.h=q.front().h+1;
+                            l.w=q.front().w-1;
+                            q.push(l);
+                        }
+                        if(island[q.front().h-1][q.front().w+1]==1&&q.front().h>0&&q.front().w<w-1){
+                            island[q.front().h-1][q.front().w+1]=0;
+                            l.h=q.front().h-1;
+                            l.w=q.front().w+1;
+                            q.push(l);
+                        }
+                        q.pop();
+                    }
+                    count+=1;
+                }
+            }
+        }
+        cout<<count<<endl;
     }
 }
